@@ -19,11 +19,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.isil.am2.examplerest.MainActivity;
 import com.isil.am2.examplerest.R;
+import com.isil.am2.examplerest.model.entity.response.ArticleResponse;
 import com.isil.am2.examplerest.model.entity.response.LoginResponse;
 import com.isil.am2.examplerest.view.listeners.OnFragmentListener;
 
@@ -51,7 +53,7 @@ public class MainFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentListener mListener;
-    private TextView tviUsername;
+    private TextView tviUsername,tviResult;
     private EditText eteTitle, eteBody, eteType;
     private Button btnAgregar;
     private View vLoading;
@@ -59,6 +61,7 @@ public class MainFragment extends Fragment {
     private String title, body, type;
     private RequestQueue queue;
     private LoginResponse entity;
+    private ArticleResponse articleResponse;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -123,6 +126,7 @@ public class MainFragment extends Fragment {
         entity= ((MainActivity)getActivity()).getLoginResponse();
 
         tviUsername= (TextView)getView().findViewById(R.id.tviUsername);
+        tviResult= (TextView)getView().findViewById(R.id.tviResult);
         eteTitle= (EditText)getView().findViewById(R.id.eteTitle);
         eteBody= (EditText)getView().findViewById(R.id.eteBody);
         eteType= (EditText)getView().findViewById(R.id.eteType);
@@ -150,35 +154,35 @@ public class MainFragment extends Fragment {
         queue = Volley.newRequestQueue(getActivity());
 
         String url = getString(R.string.url_drupal_article);
-        Log.i("HomeActivity", "url " + url);
+        Log.i(TAG, "url " + url);
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                url, null,
-                new Response.Listener<JSONObject>()
+        StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
+                url,
+                new Response.Listener<String>()
                 {
 
                     @Override
-                    public void onResponse(JSONObject response)
+                    public void onResponse(String response)
                     {
-                        Log.i("HomeActivity", "response "+response.toString());
+                        Log.i(TAG, "response "+response);
                         GsonBuilder gsonb = new GsonBuilder();
                         Gson gson = gsonb.create();
 
-                        /*loginResponse=null;
+                        articleResponse=null;
                         try
                         {
-                            loginResponse= gson.fromJson(response.toString(),LoginResponse.class);
-                            if(loginResponse!=null)
+                            articleResponse= gson.fromJson(response,ArticleResponse.class);
+                            if(articleResponse!=null)
                             {
-                                Log.i(TAG, "loginResponse "+loginResponse.toString());
+                                Log.i(TAG, "articleResponse "+articleResponse.toString());
 
-                                gotoHome();
+                                tviResult.setText(articleResponse.toString());
                             }
 
                         }catch (Exception e)
                         {
 
-                        }*/
+                        }
                         vLoading.setVisibility(View.GONE);
 
                     }
@@ -188,7 +192,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                Log.i("HomeActivity", "Error: " + error.getMessage());
+                Log.i(TAG, "Error: " + error.getMessage());
                 // hide the progress dialog
 
                 vLoading.setVisibility(View.GONE);
@@ -214,9 +218,11 @@ public class MainFragment extends Fragment {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String>  params = new HashMap<String, String>();
                 //params.put("Content-Type", "application/json");
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                params.put("Cookie",entity.getCookie());
+                //params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Content-Type", "application/json");
+                params.put("Cookie",entity.getSessid());
                 params.put("X-CSRF-Token", entity.getToken());
+                Log.d(TAG, "headers " + params.toString());
 
                 return params;
             }
