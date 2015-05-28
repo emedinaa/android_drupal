@@ -20,7 +20,7 @@ import com.isil.am2.examplerest.view.listeners.OnFragmentListener;
 public class MainActivity extends ActionBarActivity implements OnFragmentListener{
 
     private static final String TAG = "MainActivity";
-    private MainFragment mainFragment;
+    private MainFragment mainFragment= MainFragment.newInstance(null,null);
     private LoginResponse loginResponse;
 
     @Override
