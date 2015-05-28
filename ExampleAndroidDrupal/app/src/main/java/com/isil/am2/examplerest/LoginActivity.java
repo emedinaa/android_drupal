@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -37,6 +38,7 @@ public class LoginActivity extends ActionBarActivity {
 
     private RequestQueue queue;
     private LoginResponse loginResponse;
+    private String headerCookie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +105,7 @@ public class LoginActivity extends ActionBarActivity {
 
         //String url = getString(R.string.url_login)+"?username="+username+"&password="+password;
         String url = getString(R.string.url_drupal_login);
-        Log.i("HomeActivity", "url "+url);
+        Log.i("HomeActivity", "url " + url);
 
         StringRequest jsonObjReq = new StringRequest(Request.Method.POST,
                 url,
@@ -166,11 +168,23 @@ public class LoginActivity extends ActionBarActivity {
                 params.put("Content-Type", "application/x-www-form-urlencoded");
                 return params;
             }
+
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                Map headers = response.headers;
+                headerCookie = (String) headers.get("Set-Cookie");
+
+                return super.parseNetworkResponse(response);
+            }
         };
+
+
         queue.add(jsonObjReq);
     }
 
     private void gotoHome() {
+        loginResponse.setHeaderCookie(headerCookie);
+        Log.i(TAG, "cookie "+headerCookie);
         Bundle bundle=new Bundle();
         bundle.putSerializable("ENTITY",loginResponse);
         Intent intent= new Intent(this,MainActivity.class);

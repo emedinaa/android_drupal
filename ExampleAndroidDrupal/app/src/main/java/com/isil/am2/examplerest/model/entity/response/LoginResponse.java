@@ -16,6 +16,7 @@ public class LoginResponse implements Serializable {
     private  String token;
 
     private String cookie;
+    private String headerCookie;
 
     public String getSessid() {
         return sessid;
@@ -47,5 +48,13 @@ public class LoginResponse implements Serializable {
 
     public void setCookie(String cookie) {
         this.cookie = cookie;
+    }
+
+    public String getHeaderCookie() {
+        return headerCookie;
+    }
+
+    public void setHeaderCookie(String headerCookie) {
+        this.headerCookie = headerCookie;
     }
 }

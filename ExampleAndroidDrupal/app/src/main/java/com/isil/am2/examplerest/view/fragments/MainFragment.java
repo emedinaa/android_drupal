@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -218,15 +219,18 @@ public class MainFragment extends Fragment {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String>  params = new HashMap<String, String>();
                 //params.put("Content-Type", "application/json");
-                //params.put("Content-Type", "application/x-www-form-urlencoded");
-                params.put("Content-Type", "application/json");
-                params.put("Cookie",entity.getSessid());
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                //params.put("Content-Type", "application/json");
+                //params.put("Cookie",entity.getCookie());
+                params.put("Cookie",entity.getHeaderCookie());
                 params.put("X-CSRF-Token", entity.getToken());
                 Log.d(TAG, "headers " + params.toString());
 
                 return params;
             }
         };
+        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(10000,
+                1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsonObjReq);
     }
 
