@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -178,7 +179,8 @@ public class LoginActivity extends ActionBarActivity {
             }
         };
 
-
+        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(10000,
+                1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsonObjReq);
     }
 
