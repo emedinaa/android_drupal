@@ -17,7 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:hint="Username"
-            android:text="admin"
+            android:text="@string/username"
             android:inputType="text"
             android:layout_marginTop="147dp" />
 
@@ -28,7 +28,7 @@
             android:layout_below="@+id/editText"
             android:inputType="textPassword"
             android:hint="Password"
-            android:text="admin"
+            android:text="@string/password"
             android:layout_marginBottom="20dp"/>
 
         <Button

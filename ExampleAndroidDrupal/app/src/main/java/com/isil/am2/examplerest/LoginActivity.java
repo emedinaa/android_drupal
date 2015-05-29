@@ -104,7 +104,6 @@ public class LoginActivity extends ActionBarActivity {
         vLoading.setVisibility(View.VISIBLE);
         queue = Volley.newRequestQueue(this);
 
-        //String url = getString(R.string.url_login)+"?username="+username+"&password="+password;
         String url = getString(R.string.url_drupal_login);
         Log.i("HomeActivity", "url " + url);
 

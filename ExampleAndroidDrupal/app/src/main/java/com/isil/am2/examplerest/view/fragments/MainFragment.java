@@ -218,10 +218,7 @@ public class MainFragment extends Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String>  params = new HashMap<String, String>();
-                //params.put("Content-Type", "application/json");
                 params.put("Content-Type", "application/x-www-form-urlencoded");
-                //params.put("Content-Type", "application/json");
-                //params.put("Cookie",entity.getCookie());
                 params.put("Cookie",entity.getHeaderCookie());
                 params.put("X-CSRF-Token", entity.getToken());
                 Log.d(TAG, "headers " + params.toString());
